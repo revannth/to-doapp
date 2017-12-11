@@ -1,0 +1,73 @@
+<!--home.html-->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Pusher Test</title>
+	<link rel="stylesheet" href="/static/home.css">
+</head>
+<body>
+      <section class="todoapp">
+        <header class="header">
+          <h1>Todos</h1>
+          <input class="new-todo" placeholder="What needs to be done?" 
+            autofocus="" onkeypress="addItem(event)">
+        </header>
+
+        <section class="main">
+          <ul class="todo-list"></ul>
+        </section>
+
+        <footer class="footer"></footer>  
+      </section>
+      <script type="text/javascript">
+      	function addItem(eve){
+      		if(eve.which==13 || eve.keyCode==13){
+      			let item = document.querySelector('.new-todo');
+      			fetch('/add-todo',{
+      				method: 'post',
+      				body: JSON.stringify({
+      					id: `item-${Date.now()}`,
+      					value: item.value,
+      					completed:0
+
+
+
+      				})
+      			})
+      			.then(resp =>{
+      				item.value= ""
+      			};)
+      		}
+      	}
+
+      	function removeItem(eve){
+      		fetch(`/remove-todo/${eve}`);
+      	}
+
+      	function toggleComplete(eve){
+      		let id = eve.dataset.id,
+      		completed =(eve.dataset.completed == "1"?"0":"1");
+      		fetch(`/update-todo/${id}`,{
+      			method:'post',
+      			body: JSON.stringify({completed})
+      		});
+
+      	}
+      	function appendToList(data) {
+          let html = `
+            <li id="${data.id}">
+              <div class="view">
+                <input class="toggle" type="checkbox" onclick="toggleComplete(this)" 
+                  data-completed="${data.completed}" data-id="${data.id}">
+                <label>${data.value}</label>
+                <button class="destroy" onclick="removeItem('${data.id}')"></button>
+              </div>
+            </li>`;
+          let list = document.querySelector(".todo-list")
+          list.innerHTML += html;
+       };
+
+
+      </script>
+    </body>
+</html>
