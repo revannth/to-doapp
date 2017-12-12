@@ -30,7 +30,7 @@ def removeTodo(removed_id):
 	pusher.trigger('todo','item-removed',data) #Triggering an event to remove the element
 	return jsonify(data) #Sending the modified data to the view
 
-@app.route('/update-todo/<updated_id',methods=['POST'])
+@app.route('/update-todo/<updated_id>',methods=['POST'])
 def updateTodo(updated_id):
 	data = {
 	'id':updated_id,
@@ -41,11 +41,7 @@ def updateTodo(updated_id):
 	return jsonify(data)
 
 
+if __name__ == '__main__':
+	app.run(debug=True)
+	
 
-
-
-
-
-
-
-app.run(debug=True)
